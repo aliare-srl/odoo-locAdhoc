@@ -20,6 +20,11 @@ def monkey_patch_inverse_l10n_latam_document_number():
         """ Parche feo para poder usar liquidaciones hasta que se mezcle https://github.com/odoo/odoo/pull/78632 en
         master"""
         orginal_method(self)
+
+        # Verificar si el campo l10n_ar_is_pos existe en journal_id, o sea que si no tiene el modulo no haría nada.
+        if not hasattr(self.journal_id, 'l10n_ar_is_pos'):
+            return
+        
         to_review = self.filtered(lambda x: (
             x.journal_id.l10n_ar_is_pos
             and x.l10n_latam_document_type_id
